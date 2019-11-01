@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta lang="en">
+    <meta description="Optical quiz app">
+    <title>So you think you're an optical Yoda?</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+<body>
+    <div class="intro">
+        <div>
+            <h3>intro view</h3>
+        </div>
+        
+        <h1>Let's see if you're an optical Yoda</h1>
+        <button>Start</button>
+    </div>
+    <div class="questions">
+        <div>
+            <h3>question view</h3>
+        </div>
+        
+        <p><strong>Q1:</strong> Hyperopia is when ...</p>
+        <form>
+            <div class="answer">
+                <input type="radio" name="answer1" id="answer1">
+                <label for="answer1">the focal point of light is behind the retina</label>
+            </div>
+            <div class="answer">
+                <input type="radio" name="answer2" id="answer2">
+                <label for="answer2">the focal point of light is before the retina</label>
+            </div>
+            <div class="answer">
+                <input type="radio" name="answer3" id="answer3">
+                <label for="answer3">the focal point of light inside the retina</label>
+            </div>
+            <button type="submit">Submit and next question</button>
+        </form>
+        <p>Score: 1</p>
+    </div>
+    <div class="wrong-answer">
+        <div>
+            <h3>wrong answer view</h3>
+        </div>
+        <h1>Wrong Answer</h1>
+        <h3>___ was the correct answer</h3>
+        <button type="submit">Next Question</button>
+    </div>
+    <div class="end">
+        <div>
+            <h3>end view</h3>
+        </div>
+        <p>based on score</p>
+        <p>perfect score</p>
+        <h1>Well done Master Yoda</h1>
+        <p>better than half right</p>
+        <h1>Yoda you are not, but Qui-Gon would be proud</h1>
+        <p>worse than half right</p>
+        <h1>You still have much to learn young Padawan</h1>
+    </div>
+</body>
+</html>

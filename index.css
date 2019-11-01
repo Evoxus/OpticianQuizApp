@@ -1,0 +1,25 @@
+body {
+    padding: 0 50;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+div {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid grey;
+}
+
+/* .intro {
+    
+}
+*/
+
+/*
+.wrong-answer {
+    
+}
+
+.end {
+    
+} */
