@@ -1,6 +1,6 @@
 const STATE = {
     score: 0,
-    currentQuestion: '',
+    currentQuestion: QUIZ.questions[0],
 }
 
 function startQuiz() {
@@ -33,4 +33,8 @@ function trackScore() {
 
 function displayScore() {
     // will get score at the end of the quiz and display to user.
+}
+
+function renderQuiz() {
+    // takes quiz and state to render the proper view
 }
