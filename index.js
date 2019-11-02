@@ -9,26 +9,32 @@ const STATE = {
 
 // VIEWS
 
-const intro = `<h1 class="title">${QUIZ.title}</h1>
+function intro() {
+  return `<h1 class="title">${QUIZ.title}</h1>
   <form>
     <button class="start" type="submit">Start?</button>
-  </form>`;
+  </form>`
+}
 
 function buildAnswers(state) {
+  const question = QUIZ.questions[state.currentQuestion];
   let answers = [];
-  for(let i = 0; i < QUIZ.questions[state.currentQuestion].length; i++) {
+  for(let i = 0; i < question.answers.length; i++) {
     answers.push(`<div class="answer">
-    <input data-correct="${QUIZ.questions[state.currentQuestion].correct}" type="radio" name="answer${i}" id="answer${i}">
-    <label for="answer${i}">${QUIZ.questions[state.currentQuestion].answers[i]}</label>
+    <input data-correct="${question.correct}" type="radio" name="answer${i}" id="answer${i}">
+    <label for="answer${i}">${question.answers[i]}</label>
 </div>`);
   }
   return answers.join('');
 }
 
-function questionsView(answers){
+function questionsView(state){
+  const question = QUIZ.questions[state.currentQuestion];
   return `<div class="questions">
+  <p>Question ${state.currentQuestion} of ${QUIZ.questions.length}</p>
+  <h3>${question.text}</h3>
   <form>
-    ${answers}
+    ${buildAnswers(state)}
     <button type="submit">Submit and next question</button>
   </form>`
 }
@@ -38,7 +44,6 @@ function startQuiz() {
   // updating STATE.stage to 'QUESTIONS' from 'NOT STARTED'
   $('.app').submit(e => {
     e.preventDefault();
-    console.log(event);
     STATE.stage = 'QUESTIONS';
     renderQuiz();
   });
@@ -46,12 +51,16 @@ function startQuiz() {
 
 function getQuestion() {
   // this updates the currentQuestion in STATE
-  STATE.currentQuestion += 1;
+  $('.app').submit(function(e) {
+    e.preventDefault();
+    STATE.currentQuestion ++;
+    checkAnswer();
+  })
 }
 
-function checkAnswer(QUIZ) {
+function checkAnswer(QUIZ, target) {
   // this will check the user's answer against the correct answer determining which view goes next
-  if(QUIZ.questions[STATE.currentQuestion].correct === null/*userInput*/) {
+  if(QUIZ.questions[STATE.currentQuestion].correct === target) {
     return true;
   } else {
     return false;
@@ -87,10 +96,11 @@ function displayScore() {
 function determineView() {
   let view;
   if(STATE.stage === 'NOT STARTED') {
-    view = intro;
+    view = intro();
+    startQuiz();
   } else if (STATE.stage === 'QUESTIONS') {
-    view = questionsView();
-    
+    view = questionsView(STATE);
+    getQuestion();
   } else if (STATE.stage === 'RIGHT ANSWER') {
     view = correctAnswer;
   } else if (STATE.stage === 'WRONG ANSWER') {
@@ -104,9 +114,6 @@ function determineView() {
 function renderQuiz(QUIZ) {
   // takes quiz, views and state to render the proper view
   const currentView = determineView(STATE);
-  if(currentView === intro) {
-    startQuiz();
-  }
   $('.app').html(currentView);
 
 }
