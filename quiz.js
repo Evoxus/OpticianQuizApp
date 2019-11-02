@@ -1,11 +1,3 @@
-// STATE
-
-const STATE = {
-  score: 0,
-  currentQuestion: 0,
-  stage: 'NOT STARTED'
-}
-
 // QUIZ OBJECT
 
 const QUIZ = {
@@ -116,25 +108,3 @@ const QUIZ = {
   ],
 
 }
-
-// VIEWS
-
-const intro = `<h1 class="title">${QUIZ.title}</h1>
-  <button type="submit">Start?</button>`;
-
-function buildAnswers(state) {
-  let answers = '';
-  for(let i = 0; i < QUIZ.questions[state.currentQuestion].length; i++) {
-    answers += `<div class="answer">
-    <input data-correct="${QUIZ.questions[state.currentQuestion].correct}" type="radio" name="answer${i}" id="answer${i}">
-    <label for="answer${i}">${QUIZ.questions[state.currentQuestion].answers[i]}</label>
-</div>`
-  }
-  return answers;
-}
-
-const questions = `<div class="questions">
-  <form>
-    ${buildAnswers(STATE)}
-    <button type="submit">Submit and next question</button>
-  </form>`

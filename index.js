@@ -1,11 +1,47 @@
+// STATE
+
+const STATE = {
+  score: 0,
+  currentQuestion: 0,
+  stage: 'NOT STARTED'
+}
+
+
+// VIEWS
+
+const intro = `<h1 class="title">${QUIZ.title}</h1>
+  <form>
+    <button class="start" type="submit">Start?</button>
+  </form>`;
+
+function buildAnswers(state) {
+  let answers = [];
+  for(let i = 0; i < QUIZ.questions[state.currentQuestion].length; i++) {
+    answers.push(`<div class="answer">
+    <input data-correct="${QUIZ.questions[state.currentQuestion].correct}" type="radio" name="answer${i}" id="answer${i}">
+    <label for="answer${i}">${QUIZ.questions[state.currentQuestion].answers[i]}</label>
+</div>`);
+  }
+  return answers.join('');
+}
+
+function questionsView(answers){
+  return `<div class="questions">
+  <form>
+    ${answers}
+    <button type="submit">Submit and next question</button>
+  </form>`
+}
+
 function startQuiz() {
   // this will start the quiz
   // updating STATE.stage to 'QUESTIONS' from 'NOT STARTED'
-  $('.app').on('click', function(e){
+  $('.app').submit(e => {
     e.preventDefault();
     console.log(event);
     STATE.stage = 'QUESTIONS';
-  })
+    renderQuiz();
+  });
 }
 
 function getQuestion() {
@@ -53,7 +89,8 @@ function determineView() {
   if(STATE.stage === 'NOT STARTED') {
     view = intro;
   } else if (STATE.stage === 'QUESTIONS') {
-    view = questions;
+    view = questionsView();
+    
   } else if (STATE.stage === 'RIGHT ANSWER') {
     view = correctAnswer;
   } else if (STATE.stage === 'WRONG ANSWER') {
@@ -67,6 +104,9 @@ function determineView() {
 function renderQuiz(QUIZ) {
   // takes quiz, views and state to render the proper view
   const currentView = determineView(STATE);
+  if(currentView === intro) {
+    startQuiz();
+  }
   $('.app').html(currentView);
 
 }
