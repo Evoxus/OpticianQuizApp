@@ -1,17 +1,16 @@
-const STATE = {
-  score: 0,
-  currentQuestion: QUIZ.questions[0],
-  stage: 'NOT STARTED'
-}
-
 function startQuiz() {
   // this will start the quiz
   // updating STATE.stage to 'QUESTIONS' from 'NOT STARTED'
-  
+  $('.app').on('click', function(e){
+    e.preventDefault();
+    console.log(event);
+    STATE.stage = 'QUESTIONS';
+  })
 }
 
-function getQuestion(QUIZ) {
-  // this will retrieve the next question from the QUIZ object
+function getQuestion() {
+  // this updates the currentQuestion in STATE
+  STATE.currentQuestion += 1;
 }
 
 function checkAnswer(QUIZ) {
@@ -27,9 +26,11 @@ function preventSkip() {
   // this will check user has selected an input otherwise preventing moving forward
 }
 
-function displayQuestionNum() {
-  // this will get the question number displaying x of 10
-}
+/* UNNEEDED? JUST GET INDEX OF QUESTION AND ADD 1 IN RENDER
+function QuestionNum() {
+//   // this will get the question number displaying x of 10
+
+}*/
 
 function rightOrWrongFeedback() {
   // this will get the result of checkAnswer and determine the feedback to display to the user
@@ -37,16 +38,36 @@ function rightOrWrongFeedback() {
 
 function trackScore() {
   // this will increment score based on checkAnswer result
+  if(checkAnswer()) {
+    STATE.score += 1;
+  }
 }
-
+/* UNNEEDED? JUST GET SCORE FROM STATE AND PLUG INTO VIEW
 function displayScore() {
   // will get score at the end of the quiz and display to user.
+
+}*/
+
+function determineView() {
+  let view;
+  if(STATE.stage === 'NOT STARTED') {
+    view = intro;
+  } else if (STATE.stage === 'QUESTIONS') {
+    view = questions;
+  } else if (STATE.stage === 'RIGHT ANSWER') {
+    view = correctAnswer;
+  } else if (STATE.stage === 'WRONG ANSWER') {
+    view = wrongAnswer;
+  } else if (STATE.stage === 'FINISHED') {
+    view = end;
+  }
+  return view;
 }
 
-function renderQuiz(STATE, QUIZ) {
+function renderQuiz(QUIZ) {
   // takes quiz, views and state to render the proper view
-  const view = intro;
-  $('.app').html(view)
+  const currentView = determineView(STATE);
+  $('.app').html(currentView);
 
 }
 
