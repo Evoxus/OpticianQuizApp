@@ -1,3 +1,8 @@
+const STATE = {
+    score: 0,
+    currentQuestion: '',
+}
+
 function startQuiz() {
     // this will start the quiz
 }
