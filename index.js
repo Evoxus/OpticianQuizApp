@@ -28,21 +28,53 @@ function buildAnswers(state) {
 function questionsView(state){
   const question = QUIZ.questions[state.currentQuestion];
   return `<div class="questions">
-  <p>Question ${state.currentQuestion + 1} of ${QUIZ.questions.length}</p>
-  <p>Score: ${state.score}</p>
-  <h3>${question.text}</h3>
-  <form id='js-quiz'>
-    ${buildAnswers(state)}
-    <button class="question-submit" type="submit">Submit and next question</button>
-  </form>`
+    <p>Question ${state.currentQuestion + 1} of ${QUIZ.questions.length}</p>
+    <p>Score: ${state.score}</p>
+    <h3>${question.text}</h3>
+    <form id='js-quiz'>
+      ${buildAnswers(state)}
+      <button class="question-submit" type="submit">Submit and next question</button>
+    </form>
+  </div>`
+}
+
+function endView() {
+  const quizLength = QUIZ.questions.length;
+  if(STATE.score === quizLength) {
+    return `<div class="end">
+      <h3>Well done Master Yoda</h3>
+      <h5>Got them all right you did</h5>
+    </div>
+    <form>
+      <button class="start" type="submit">Start?</button>
+    </form>`
+  } else if (STATE.score > quizLength / 2) {
+    return `<div class="end">
+      <h3>Yoda you are not, but Qui-Gon would be proud</h3>
+      <h5>You got ${STATE.score} of ${quizLength} right</h5>
+    </div>
+    <form>
+      <button class="start" type="submit">Start?</button>
+    </form>`
+  } else {
+    return `<div class="end">
+      <h3>You still have much to learn young Padawan</h3>
+      <h5>You got ${STATE.score} of ${quizLength} right</h5>
+    </div>
+    <form>
+      <button class="start" type="submit">Start?</button>
+    </form>`
+  }
 }
 
 // HANDLERS
 function startQuiz() {
-  // this will start the quiz
+  // this will start or restart the quiz
   $('.app').on('click', '.start', e => {
     e.preventDefault();
     STATE.stage = 'QUESTIONS';
+    STATE.currentQuestion = 0;
+    STATE.score = 0;
     renderQuiz(QUIZ);
   });
 }
@@ -60,16 +92,25 @@ function handleQuestionSubmit() {
     }
 
     let id_num = question.answers.findIndex(i => i === selectedAnswer);
+    if(STATE.currentQuestion + 1 !== QUIZ.questions.length) {
+      if(checkAnswer(QUIZ, id_num)) {
+        STATE.currentQuestion ++;
+        STATE.score ++;
+        renderQuiz(QUIZ);
+      } else if (!checkAnswer(QUIZ, id_num)) {
+        STATE.currentQuestion ++;
+        renderQuiz(QUIZ);
+      }
+    } else {
+      if(checkAnswer(QUIZ, id_num)) {
+        STATE.stage = 'FINISHED';
+        STATE.score ++;
+        renderQuiz(QUIZ);
+      } else if (!checkAnswer(QUIZ, id_num)) {
+        STATE.stage = 'FINISHED';
+        renderQuiz(QUIZ);
+      }
 
-    if(checkAnswer(QUIZ, id_num)) {
-      console.log('right answer');
-      STATE.currentQuestion ++;
-      STATE.score ++;
-      renderQuiz(QUIZ);
-    } else if (!checkAnswer(QUIZ, id_num)) {
-      console.log('Wrong answer')
-      STATE.currentQuestion ++;
-      renderQuiz(QUIZ);
     }
   })
 }
@@ -109,6 +150,7 @@ function determineView() {
 }
 
 function handleQuiz() {
+  // This function sets all the listeners initially
   startQuiz();
   handleQuestionSubmit();
 }
