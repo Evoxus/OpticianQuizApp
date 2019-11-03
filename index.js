@@ -9,7 +9,7 @@ const STATE = {
 function intro() {
   return `<form>
     <button class="start" type="submit">Start?</button>
-  </form>`
+  </form>`;
 }
 
 function buildAnswers(state) {
@@ -35,7 +35,27 @@ function questionsView(state){
       ${buildAnswers(state)}
       <button class="question-submit" type="submit">Submit and next question</button>
     </form>
-  </div>`
+  </div>`;
+}
+function correctAnswerView() {
+  return `<div class="right-answer">
+    <h3>Right you are!</h3>
+  </div>
+  <form>
+    <button class="continue" type="submit">Continue</button>
+  </form>`;
+}
+
+function wrongAnswerView() {
+  const question = QUIZ.questions[STATE.currentQuestion];
+  return `<div class="wrong-answer">
+    <h3>Not quite</h3>
+    <p>The answer to <strong>${question.text}</strong> is: </p>
+    <p>${question.answers[question.correct]}</p>
+  </div>
+  <form>
+    <button class="continue" type="submit">Continue</button>
+  </form>`;
 }
 
 function endView() {
@@ -46,24 +66,24 @@ function endView() {
       <h5>Got them all right you did</h5>
     </div>
     <form>
-      <button class="start" type="submit">Start?</button>
-    </form>`
+      <button class="start" type="submit">Start again?</button>
+    </form>`;
   } else if (STATE.score > quizLength / 2) {
     return `<div class="end">
       <h3>Yoda you are not, but Qui-Gon would be proud</h3>
       <h5>You got ${STATE.score} of ${quizLength} right</h5>
     </div>
     <form>
-      <button class="start" type="submit">Start?</button>
-    </form>`
+      <button class="start" type="submit">Start again?</button>
+    </form>`;
   } else {
     return `<div class="end">
       <h3>You still have much to learn young Padawan</h3>
       <h5>You got ${STATE.score} of ${quizLength} right</h5>
     </div>
     <form>
-      <button class="start" type="submit">Start?</button>
-    </form>`
+      <button class="start" type="submit">Start again?</button>
+    </form>`;
   }
 }
 
@@ -94,11 +114,11 @@ function handleQuestionSubmit() {
     let id_num = question.answers.findIndex(i => i === selectedAnswer);
     if(STATE.currentQuestion + 1 !== QUIZ.questions.length) {
       if(checkAnswer(QUIZ, id_num)) {
-        STATE.currentQuestion ++;
         STATE.score ++;
+        STATE.stage = 'RIGHT ANSWER';
         renderQuiz(QUIZ);
       } else if (!checkAnswer(QUIZ, id_num)) {
-        STATE.currentQuestion ++;
+        STATE.stage = 'WRONG ANSWER';
         renderQuiz(QUIZ);
       }
     } else {
@@ -112,7 +132,7 @@ function handleQuestionSubmit() {
       }
 
     }
-  })
+  });
 }
 
 function checkAnswer(QUIZ, target) {
@@ -124,11 +144,13 @@ function checkAnswer(QUIZ, target) {
   }
 }
 
-function trackScore() {
-  // this will increment score based on checkAnswer result
-  if(checkAnswer()) {
-    STATE.score += 1;
-  }
+function handleContinue() {
+  $('.app').on('click', '.continue', function(e) {
+    e.preventDefault();
+    STATE.stage = 'QUESTIONS';
+    STATE.currentQuestion ++;
+    renderQuiz(QUIZ);
+  });
 }
 
 function determineView() {
@@ -152,7 +174,8 @@ function determineView() {
 function handleQuiz() {
   // This function sets all the listeners initially
   startQuiz();
-  handleQuestionSubmit();
+  handleQuestionSubmit()
+  handleContinue();
 }
 
 function renderQuiz(QUIZ) {
