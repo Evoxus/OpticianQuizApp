@@ -1,28 +1,25 @@
 // STATE
-
 const STATE = {
   score: 0,
   currentQuestion: 0,
   stage: 'NOT STARTED'
 }
 
-
 // VIEWS
-
 function intro() {
-  return `<h1 class="title">${QUIZ.title}</h1>
-  <form>
+  return `<form>
     <button class="start" type="submit">Start?</button>
   </form>`
 }
 
 function buildAnswers(state) {
   const question = QUIZ.questions[state.currentQuestion];
-  let answers = [];
+  const answers = [];
   for(let i = 0; i < question.answers.length; i++) {
     answers.push(`<div class="answer">
-    <input data-correct="${question.correct}" type="radio" name="answer${i}" id="answer${i}">
-    <label for="answer${i}">${question.answers[i]}</label>
+    <input type="radio" name="answer" id="answer${i}"
+    value="${question.answers[i]}">
+    <label for="answer">${question.answers[i]}</label>
 </div>`);
   }
   return answers.join('');
@@ -31,30 +28,49 @@ function buildAnswers(state) {
 function questionsView(state){
   const question = QUIZ.questions[state.currentQuestion];
   return `<div class="questions">
-  <p>Question ${state.currentQuestion} of ${QUIZ.questions.length}</p>
+  <p>Question ${state.currentQuestion + 1} of ${QUIZ.questions.length}</p>
+  <p>Score: ${state.score}</p>
   <h3>${question.text}</h3>
-  <form>
+  <form id='js-quiz'>
     ${buildAnswers(state)}
-    <button type="submit">Submit and next question</button>
+    <button class="question-submit" type="submit">Submit and next question</button>
   </form>`
 }
 
+// HANDLERS
 function startQuiz() {
   // this will start the quiz
-  // updating STATE.stage to 'QUESTIONS' from 'NOT STARTED'
-  $('.app').submit(e => {
+  $('.app').on('click', '.start', e => {
     e.preventDefault();
     STATE.stage = 'QUESTIONS';
-    renderQuiz();
+    renderQuiz(QUIZ);
   });
 }
 
-function getQuestion() {
-  // this updates the currentQuestion in STATE
-  $('.app').submit(function(e) {
+function handleQuestionSubmit() {
+  $('.app').on('click', '.question-submit', function(e) {
     e.preventDefault();
-    STATE.currentQuestion ++;
-    checkAnswer();
+
+    let question = QUIZ.questions[STATE.currentQuestion];
+    let selectedAnswer = $("input[name=answer]:checked").val();
+    // Check that answer is selected and prevent skip if not.
+    if (!selectedAnswer) {
+      alert("Please choose an answer to continue.");
+      return;
+    }
+
+    let id_num = question.answers.findIndex(i => i === selectedAnswer);
+
+    if(checkAnswer(QUIZ, id_num)) {
+      console.log('right answer');
+      STATE.currentQuestion ++;
+      STATE.score ++;
+      renderQuiz(QUIZ);
+    } else if (!checkAnswer(QUIZ, id_num)) {
+      console.log('Wrong answer')
+      STATE.currentQuestion ++;
+      renderQuiz(QUIZ);
+    }
   })
 }
 
@@ -67,57 +83,44 @@ function checkAnswer(QUIZ, target) {
   }
 }
 
-function preventSkip() {
-  // this will check user has selected an input otherwise preventing moving forward
-}
-
-/* UNNEEDED? JUST GET INDEX OF QUESTION AND ADD 1 IN RENDER
-function QuestionNum() {
-//   // this will get the question number displaying x of 10
-
-}*/
-
-function rightOrWrongFeedback() {
-  // this will get the result of checkAnswer and determine the feedback to display to the user
-}
-
 function trackScore() {
   // this will increment score based on checkAnswer result
   if(checkAnswer()) {
     STATE.score += 1;
   }
 }
-/* UNNEEDED? JUST GET SCORE FROM STATE AND PLUG INTO VIEW
-function displayScore() {
-  // will get score at the end of the quiz and display to user.
-
-}*/
 
 function determineView() {
   let view;
   if(STATE.stage === 'NOT STARTED') {
     view = intro();
-    startQuiz();
   } else if (STATE.stage === 'QUESTIONS') {
     view = questionsView(STATE);
-    getQuestion();
+  } else if (STATE.stage === 'NO ANSWER') {
+    view = noAnswerView();
   } else if (STATE.stage === 'RIGHT ANSWER') {
-    view = correctAnswer;
+    view = correctAnswerView();
   } else if (STATE.stage === 'WRONG ANSWER') {
-    view = wrongAnswer;
+    view = wrongAnswerView();
   } else if (STATE.stage === 'FINISHED') {
-    view = end;
+    view = endView();
   }
   return view;
 }
 
+function handleQuiz() {
+  startQuiz();
+  handleQuestionSubmit();
+}
+
 function renderQuiz(QUIZ) {
   // takes quiz, views and state to render the proper view
+  $('.header').html(`<h1 class="title">${QUIZ.title}</h1>`)
   const currentView = determineView(STATE);
   $('.app').html(currentView);
-
 }
 
 $(function(){
-  renderQuiz();
+  renderQuiz(QUIZ);
+  handleQuiz();
 })
