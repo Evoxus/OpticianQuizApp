@@ -32,7 +32,9 @@ function questionsView(state){
     <p>Score: ${state.score}</p>
     <h3>${question.text}</h3>
     <form id='js-quiz'>
-      ${buildAnswers(state)}
+      <div class="radio-container">
+        ${buildAnswers(state)}
+      </div>
       <button class="question-submit" type="submit">Submit and next question</button>
     </form>
   </div>`;
@@ -40,10 +42,11 @@ function questionsView(state){
 function correctAnswerView() {
   return `<div class="right-answer">
     <h3>Right you are!</h3>
+    <form>
+      <button class="continue" type="submit">Continue</button>
+    </form>
   </div>
-  <form>
-    <button class="continue" type="submit">Continue</button>
-  </form>`;
+  `;
 }
 
 function wrongAnswerView() {
@@ -52,10 +55,10 @@ function wrongAnswerView() {
     <h3>Not quite</h3>
     <p>The answer to <strong>${question.text}</strong> is: </p>
     <p>${question.answers[question.correct]}</p>
-  </div>
-  <form>
-    <button class="continue" type="submit">Continue</button>
-  </form>`;
+    <form>
+      <button class="continue" type="submit">Continue</button>
+    </form>
+  </div>`;
 }
 
 function endView() {
@@ -80,10 +83,10 @@ function endView() {
     return `<div class="end">
       <h3>You still have much to learn young Padawan</h3>
       <h5>You got ${STATE.score} of ${quizLength} right</h5>
-    </div>
-    <form>
-      <button class="start" type="submit">Start again?</button>
-    </form>`;
+      <form>
+        <button class="start" type="submit">Start again?</button>
+      </form>
+    </div>`;
   }
 }
 
