@@ -1,3 +1,3 @@
 # Optician Quiz App
 
-### What will be a jQuery using quiz app for Thinkful's Nights and Weekends Engineering course
+### First project from scratch in Thinkful's Nights and Weekends Engineering program
