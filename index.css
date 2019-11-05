@@ -10,6 +10,7 @@ html {
 body {
     padding: 0 50px;
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.25em;
     text-align: center;
     color: rgb(228, 228, 228);
     text-shadow: 1px 1px 2px black;
@@ -36,7 +37,7 @@ input[type="radio"] {
 
 .answer{
     margin-bottom: 10px;
-    padding-left: 60px;
+    padding-left: 40px;
 }
 
 button {
@@ -73,7 +74,7 @@ button:active {
 .questions, .right-answer, .wrong-answer, .end {
     letter-spacing: -1px;  
     background: rgb(0, 0, 0); /* fallback color */
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.9);
     padding: 10px;
     width: 50%;
     height: 33%;
@@ -91,7 +92,7 @@ button:active {
     .questions, .right-answer, .wrong-answer, .end {
         letter-spacing: -1px;  
         background: rgb(0, 0, 0); /* fallback color */
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(0, 0, 0, 0.9);
         padding: 10px;
         width: 75%;
         height: 33%;
@@ -111,11 +112,16 @@ button:active {
     and (max-device-width: 414px) {
         body {
             padding: 0;
+            font-size: 1em;
+        }
+        .title {
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
         .questions, .right-answer, .wrong-answer, .end {
             letter-spacing: -1px;  
             background: rgb(0, 0, 0); /* fallback color */
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.9);
             width: 280px;
             height: 360px;
             padding: 10px;

@@ -17,9 +17,11 @@ function buildAnswers(state) {
   const answers = [];
   for(let i = 0; i < question.answers.length; i++) {
     answers.push(`<div class="answer">
-    <input type="radio" name="answer" id="answer${i}"
-    value="${question.answers[i]}">
-    <label for="answer">${question.answers[i]}</label>
+    <label>
+      <input type="radio" name="answer" id="answer${i}"
+      value="${question.answers[i]}">
+      ${question.answers[i]}
+    </label>
 </div>`);
   }
   return answers.join('');
