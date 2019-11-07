@@ -6,9 +6,9 @@ const QUIZ = {
       { 
           text: 'Hyperopia is when…',
           answers: [
-            'the focal point of light entering the eye is behind the retina.',
-            'the focal point of light entering the eye is before the retina.',
-            'the focal point of light entering the eye is inside the retina.',
+            'The focal point of light entering the eye is behind the retina.',
+            'The focal point of light entering the eye is before the retina.',
+            'The focal point of light entering the eye is inside the retina.',
             'A patient can see hyperspace.',
           ],
           // index of correct answer
@@ -17,9 +17,9 @@ const QUIZ = {
       {
         text: 'Myopia is when…',
         answers: [
-          'the focal point of light entering the eye is behind the retina.',
+          'The focal point of light entering the eye is behind the retina.',
           'A patient is blind.',
-          'the focal point of light entering the eye is before, or in front of the retina.',
+          'The focal point of light entering the eye is before, or in front of the retina.',
           'There is no focal point.',
         ],
         correct: 2,
@@ -102,7 +102,7 @@ const QUIZ = {
           'Prism ground into the bottom half of a lens to help thin the lens.',
           'Prism ground into the bottom half of a lens to correct for vertical imbalance.',
         ],
-        correct: 2,
+        correct: 3,
       },
 
   ],
